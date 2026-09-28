@@ -1,0 +1,29 @@
+packages:
+  - "packages/*"
+
+# Native postinstall/build scripts pnpm's supply-chain policy blocks by
+# default. All legitimate: keccak/secp256k1 (Ethereum crypto, via ethers/
+# hardhat), bufferutil/utf-8-validate (ws performance addons, via hardhat's
+# JSON-RPC websocket server), bson and unrs-resolver (transitive deps of
+# hardhat/eslint tooling).
+#
+# onlyBuiltDependencies is read by pnpm <11; pnpm 11+ ignores it and
+# requires an explicit allowBuilds entry per package instead (otherwise it
+# injects an unresolved allowBuilds stub and hard-fails install). Both are
+# listed so either pnpm major version installs cleanly with no interactive
+# `pnpm approve-builds` step. See https://pnpm.io/settings.
+onlyBuiltDependencies:
+  - bson
+  - bufferutil
+  - keccak
+  - secp256k1
+  - unrs-resolver
+  - utf-8-validate
+
+allowBuilds:
+  bson: true
+  bufferutil: true
+  keccak: true
+  secp256k1: true
+  unrs-resolver: true
+  utf-8-validate: true

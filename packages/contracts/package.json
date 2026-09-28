@@ -1,0 +1,28 @@
+{
+  "name": "contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "hardhat node",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "lint": "solhint 'contracts/**/*.sol'",
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network testnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.ts --network mainnet",
+    "verify:testnet": "hardhat run scripts/verify.ts --network testnet",
+    "verify:mainnet": "hardhat run scripts/verify.ts --network mainnet",
+    "clean": "hardhat clean"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "~5.0.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/prompt-sync": "^4.2.3",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.10",
+    "prompt-sync": "^4.2.0",
+    "solhint": "^5.0.3",
+    "typescript": "^5.5.4"
+  }
+}

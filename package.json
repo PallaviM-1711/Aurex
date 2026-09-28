@@ -1,0 +1,27 @@
+{
+  "name": "my-mst-project",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "compile": "turbo run compile",
+    "lint": "turbo run lint",
+    "deploy:testnet": "turbo run deploy:testnet",
+    "deploy:mainnet": "turbo run deploy:mainnet",
+    "verify:testnet": "turbo run verify:testnet",
+    "verify:mainnet": "turbo run verify:mainnet",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.1.3"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "packageManager": "pnpm@9.12.3"
+}
