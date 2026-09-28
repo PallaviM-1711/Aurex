@@ -6,9 +6,16 @@ dotenv.config({ path: "../../.env.local" });
 async function main() {
   console.log("\n🚀 AUREX MST TESTNET PAYMENT FLOW\n");
 
-  // --------------------------------------------------
-  // 1. Check contract address
-  // --------------------------------------------------
+  const network = hre.network.name;
+
+  if (network !== "testnet") {
+    throw new Error(
+      `This script must run on MST Testnet. Current network: ${network}`
+    );
+  }
+
+  console.log("Network:", network);
+  console.log("Chain ID:", hre.network.config.chainId);
 
   const contractAddress = process.env.AUREX_CONTRACT_ADDRESS;
 
@@ -19,10 +26,6 @@ async function main() {
   }
 
   console.log("Contract address:", contractAddress);
-
-  // --------------------------------------------------
-  // 2. Get connected wallet
-  // --------------------------------------------------
 
   const [user] = await hre.ethers.getSigners();
 
@@ -36,9 +39,11 @@ async function main() {
     "tMSTC"
   );
 
-  // --------------------------------------------------
-  // 3. Connect to deployed AurexPayment contract
-  // --------------------------------------------------
+  if (balance === 0n) {
+    throw new Error(
+      "Wallet has 0 tMSTC. Fund the wallet before running the Testnet payment flow."
+    );
+  }
 
   const aurex = await hre.ethers.getContractAt(
     "AurexPayment",
@@ -49,7 +54,7 @@ async function main() {
   console.log("✓ Connected to AurexPayment");
 
   // --------------------------------------------------
-  // 4. Register a service
+  // 1. REGISTER SERVICE
   // --------------------------------------------------
 
   console.log("\n📌 Registering service...");
@@ -65,18 +70,45 @@ async function main() {
 
   const registerReceipt = await registerTx.wait();
 
+  if (!registerReceipt) {
+    throw new Error("Service registration transaction failed.");
+  }
+
   console.log(
     "✓ Service registered in block:",
-    registerReceipt?.blockNumber
+    registerReceipt.blockNumber
+  );
+
+  const serviceRegisteredEvent = registerReceipt.logs
+    .map((log: any) => {
+      try {
+        return aurex.interface.parseLog(log);
+      } catch {
+        return null;
+      }
+    })
+    .find(
+      (event: any) => event?.name === "ServiceRegistered"
+    );
+
+  if (!serviceRegisteredEvent) {
+    throw new Error(
+      "Could not find ServiceRegistered event."
+    );
+  }
+
+  const serviceId = serviceRegisteredEvent.args.serviceId;
+
+  console.log(
+    "Service ID:",
+    serviceId.toString()
   );
 
   // --------------------------------------------------
-  // 5. Lock budget
+  // 2. LOCK USER BUDGET
   // --------------------------------------------------
 
   console.log("\n💰 Locking budget...");
-
-  const serviceId = 1;
 
   const maxBudget = hre.ethers.parseEther("5");
 
@@ -88,46 +120,97 @@ async function main() {
 
   const lockReceipt = await lockTx.wait();
 
+  if (!lockReceipt) {
+    throw new Error("Budget lock transaction failed.");
+  }
+
   console.log(
     "✓ Budget locked in block:",
-    lockReceipt?.blockNumber
+    lockReceipt.blockNumber
+  );
+
+  const budgetLockedEvent = lockReceipt.logs
+    .map((log: any) => {
+      try {
+        return aurex.interface.parseLog(log);
+      } catch {
+        return null;
+      }
+    })
+    .find(
+      (event: any) => event?.name === "BudgetLocked"
+    );
+
+  if (!budgetLockedEvent) {
+    throw new Error(
+      "Could not find BudgetLocked event."
+    );
+  }
+
+  const sessionId = budgetLockedEvent.args.sessionId;
+
+  console.log(
+    "Session ID:",
+    sessionId.toString()
   );
 
   // --------------------------------------------------
-  // 6. Read session
+  // 3. SHOW SESSION DETAILS
   // --------------------------------------------------
-
-  const sessionId = 1;
 
   const session = await aurex.getSession(sessionId);
 
   console.log("\n📋 Session details:");
 
-  console.log("Session ID:", session.id.toString());
+  console.log(
+    "Session ID:",
+    session.id.toString()
+  );
+
   console.log("User:", session.user);
-  console.log("Service ID:", session.serviceId.toString());
+
+  console.log(
+    "Service ID:",
+    session.serviceId.toString()
+  );
+
   console.log(
     "Maximum budget:",
     hre.ethers.formatEther(session.maxBudget),
     "tMSTC"
   );
+
   console.log("Settled:", session.settled);
 
   // --------------------------------------------------
-  // 7. Settle usage
+  // 4. SETTLE USAGE
   // --------------------------------------------------
 
   console.log("\n⚡ Settling usage...");
 
   const usageMinutes = 20;
 
-  const expectedCost = pricePerMinute * BigInt(usageMinutes);
+  const expectedCost =
+    pricePerMinute * BigInt(usageMinutes);
 
-  console.log("Usage:", usageMinutes, "minutes");
+  const expectedRefund =
+    maxBudget - expectedCost;
+
+  console.log(
+    "Usage:",
+    usageMinutes,
+    "minutes"
+  );
 
   console.log(
     "Expected cost:",
     hre.ethers.formatEther(expectedCost),
+    "tMSTC"
+  );
+
+  console.log(
+    "Expected refund:",
+    hre.ethers.formatEther(expectedRefund),
     "tMSTC"
   );
 
@@ -136,36 +219,100 @@ async function main() {
     usageMinutes
   );
 
-  console.log("Settlement transaction:", settleTx.hash);
+  console.log(
+    "Settlement transaction:",
+    settleTx.hash
+  );
 
   const settleReceipt = await settleTx.wait();
 
+  if (!settleReceipt) {
+    throw new Error("Settlement transaction failed.");
+  }
+
   console.log(
     "✓ Settlement confirmed in block:",
-    settleReceipt?.blockNumber
+    settleReceipt.blockNumber
   );
 
   // --------------------------------------------------
-  // 8. Verify final session
+  // 5. READ SETTLEMENT EVENT
   // --------------------------------------------------
 
-  const finalSession = await aurex.getSession(sessionId);
+  const sessionSettledEvent = settleReceipt.logs
+    .map((log: any) => {
+      try {
+        return aurex.interface.parseLog(log);
+      } catch {
+        return null;
+      }
+    })
+    .find(
+      (event: any) => event?.name === "SessionSettled"
+    );
 
-  console.log("\n✅ FINAL SESSION STATUS");
+  if (!sessionSettledEvent) {
+    throw new Error(
+      "Could not find SessionSettled event."
+    );
+  }
 
-  console.log("Session ID:", finalSession.id.toString());
-  console.log("Settled:", finalSession.settled);
+  const eventUsageMinutes =
+    sessionSettledEvent.args.usageMinutes;
+
+  const providerPayment =
+    sessionSettledEvent.args.providerPayment;
+
+  const userRefund =
+    sessionSettledEvent.args.userRefund;
 
   // --------------------------------------------------
-  // 9. Final output
+  // 6. VERIFY FINAL SESSION
+  // --------------------------------------------------
+
+  const finalSession =
+    await aurex.getSession(sessionId);
+
+  if (!finalSession.settled) {
+    throw new Error(
+      "Session was not marked as settled."
+    );
+  }
+
+  // --------------------------------------------------
+  // 7. FINAL RESULT
   // --------------------------------------------------
 
   console.log("\n======================================");
-  console.log("🎉 AUREX TESTNET PAYMENT FLOW DONE");
+  console.log("🎉 AUREX TESTNET PAYMENT SUCCESS");
   console.log("======================================");
 
   console.log("\nContract:");
   console.log(contractAddress);
+
+  console.log("\nService ID:");
+  console.log(serviceId.toString());
+
+  console.log("\nSession ID:");
+  console.log(sessionId.toString());
+
+  console.log("\nUsage:");
+  console.log(
+    eventUsageMinutes.toString(),
+    "minutes"
+  );
+
+  console.log("\nProvider payment:");
+  console.log(
+    hre.ethers.formatEther(providerPayment),
+    "tMSTC"
+  );
+
+  console.log("\nUser refund:");
+  console.log(
+    hre.ethers.formatEther(userRefund),
+    "tMSTC"
+  );
 
   console.log("\nRegister TX:");
   console.log(registerTx.hash);
@@ -176,20 +323,25 @@ async function main() {
   console.log("\nSettlement TX:");
   console.log(settleTx.hash);
 
-  console.log("\nMSTScan:");
+  console.log("\nMSTScan Contract:");
   console.log(
     `https://testnet.mstscan.com/address/${contractAddress}`
   );
 
+  console.log("\nMSTScan Settlement TX:");
   console.log(
     `https://testnet.mstscan.com/tx/${settleTx.hash}`
   );
 
-  console.log("\n");
+  console.log("\n✅ Real MST Testnet payment flow completed.\n");
 }
 
 main().catch((error) => {
-  console.error("\n❌ TESTNET PAYMENT FLOW FAILED\n");
+  console.error(
+    "\n❌ TESTNET PAYMENT FLOW FAILED\n"
+  );
+
   console.error(error);
+
   process.exitCode = 1;
 });
