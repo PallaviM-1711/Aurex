@@ -1,16 +1,16 @@
 import type { HardhatRuntimeEnvironment } from "hardhat/types";
 
 export async function deployAll(hre: HardhatRuntimeEnvironment) {
-  const message = "Hello, MST!";
+  const AurexPayment = await hre.ethers.getContractFactory("AurexPayment");
 
-  const Hello = await hre.ethers.getContractFactory("Hello");
-  const hello = await Hello.deploy(message);
-  await hello.waitForDeployment();
+  const aurexPayment = await AurexPayment.deploy();
+
+  await aurexPayment.waitForDeployment();
 
   return {
-    Hello: {
-      address: await hello.getAddress(),
-      constructorArguments: [message],
+    AurexPayment: {
+      address: await aurexPayment.getAddress(),
+      constructorArguments: [],
     },
   };
 }
