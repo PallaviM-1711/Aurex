@@ -3,8 +3,8 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "my-mst-project",
-  description: "Built with create-mst-app",
+  title: "Aurex",
+  description: "Pay only for what you use.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
