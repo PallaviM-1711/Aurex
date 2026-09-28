@@ -1,90 +1,616 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
 :root {
-  color-scheme: light dark;
-  --bg: #0e151b;
-  --surface: #141d25;
-  --ink: #e8edef;
-  --ink-soft: #9aabb4;
-  --line: #26323c;
-  --accent: #e58a52;
+  --bg: #070b12;
+  --surface: #0d131d;
+  --surface-hover: #111a27;
+  --border: #1d2938;
+  --border-light: #263548;
+
+  --text: #f4f7fb;
+  --muted: #8996a8;
+  --muted-light: #b5c0ce;
+
+  --accent: #7c5cff;
+  --accent-light: #9b82ff;
+  --accent-soft: rgba(124, 92, 255, 0.12);
+
+  --success: #36d399;
+  --success-soft: rgba(54, 211, 153, 0.1);
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
   background: var(--bg);
-  color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+  min-height: 100vh;
 }
 
-main {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 4rem 1.5rem;
-}
-
-.wallet {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.wallet-address {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  padding: 0.4rem 0.7rem;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 6px;
+button,
+a {
+  font: inherit;
 }
 
 button {
-  font: inherit;
-  padding: 0.5rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--ink);
   cursor: pointer;
 }
 
-button:hover:not(:disabled) {
-  border-color: var(--accent);
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* =========================
+   APP
+========================= */
+
+.app {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(124, 92, 255, 0.12),
+      transparent 40%
+    ),
+    var(--bg);
 }
 
-.network-switcher {
-  margin-top: 1rem;
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  width: min(1180px, calc(100% - 48px));
+  height: 72px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--border);
 }
 
-.network-warning {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  background: rgba(226, 114, 114, 0.12);
-  border: 1px solid rgba(226, 114, 114, 0.4);
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-.card {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  border: 1px solid var(--line);
+.logo-mark {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   border-radius: 10px;
-  background: var(--surface);
+
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    #5a3ee8
+  );
+
+  color: white;
+  font-size: 17px;
+  font-weight: 800;
+
+  box-shadow:
+    0 8px 25px rgba(124, 92, 255, 0.25);
 }
 
-input {
-  font: inherit;
-  padding: 0.5rem 0.7rem;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  color: var(--ink);
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.navbar nav a {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.navbar nav a:hover {
+  color: white;
+}
+
+.navbar nav a.active {
+  color: white;
+}
+
+.wallet-button {
+  border: 1px solid var(--border-light);
+  background: var(--surface);
+
+  color: var(--text);
+
+  padding: 10px 17px;
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.wallet-button:hover {
+  background: var(--surface-hover);
+  border-color: #3a4d65;
+}
+
+/* =========================
+   SERVICES PAGE
+========================= */
+
+.services-page {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 72px 0 100px;
+}
+
+/* =========================
+   PAGE HEADING
+========================= */
+
+.page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  color: var(--accent-light);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  margin-bottom: 13px;
+}
+
+.page-heading h1 {
+  font-size: clamp(36px, 5vw, 52px);
+  line-height: 1.05;
+
+  letter-spacing: -2px;
+  font-weight: 800;
+
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.7;
+
+  max-width: 560px;
+}
+
+.network-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 10px 14px;
+
+  border: 1px solid rgba(54, 211, 153, 0.2);
+  background: var(--success-soft);
+
+  border-radius: 999px;
+
+  color: #8ce9bf;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+  background: var(--success);
+
+  box-shadow:
+    0 0 0 4px rgba(54, 211, 153, 0.08);
+}
+
+/* =========================
+   SERVICE GRID
+========================= */
+
+.service-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+/* =========================
+   SERVICE CARD
+========================= */
+
+.service-card {
+  min-height: 410px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 26px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.025),
+      rgba(255, 255, 255, 0)
+    ),
+    var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(124, 92, 255, 0.5),
+    transparent
+  );
+
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+
+  border-color: var(--border-light);
+
+  background: var(--surface-hover);
+}
+
+.service-card:hover::before {
+  opacity: 1;
+}
+
+.service-card.selected {
+  border-color: rgba(124, 92, 255, 0.45);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 0 40px rgba(124, 92, 255, 0.06);
+}
+
+/* =========================
+   CARD TOP
+========================= */
+
+.service-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 38px;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: var(--accent-soft);
+  border: 1px solid rgba(124, 92, 255, 0.18);
+
+  color: var(--accent-light);
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.available,
+.coming-soon {
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.4px;
+}
+
+.available {
+  color: #7ee6b2;
+  background: var(--success-soft);
+}
+
+.coming-soon {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* =========================
+   CARD CONTENT
+========================= */
+
+.service-content h2 {
+  font-size: 23px;
+  font-weight: 700;
+
+  letter-spacing: -0.6px;
+
+  margin-bottom: 11px;
+}
+
+.service-content p {
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.65;
+
+  min-height: 70px;
+}
+
+/* =========================
+   PRICE
+========================= */
+
+.price-section {
+  margin-top: auto;
+
+  padding-top: 25px;
+  margin-bottom: 20px;
+
+  border-top: 1px solid var(--border);
+}
+
+.price-section > span {
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  margin-bottom: 6px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.price strong {
+  font-size: 26px;
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+}
+
+.price span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.start-button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 13px 16px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: var(--accent);
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.start-button:hover {
+  background: var(--accent-light);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 25px rgba(124, 92, 255, 0.2);
+}
+
+.start-button.secondary {
+  background: rgba(255, 255, 255, 0.04);
+
+  color: var(--muted-light);
+
+  border: 1px solid var(--border);
+}
+
+.start-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.07);
+
+  border-color: var(--border-light);
+
+  box-shadow: none;
+}
+
+/* =========================
+   INFO PANEL
+========================= */
+
+.info-panel {
+  margin-top: 24px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+
+  padding: 20px 22px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  background: rgba(13, 19, 29, 0.7);
+}
+
+.info-icon {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--accent-soft);
+
+  color: var(--accent-light);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.info-panel strong {
+  display: block;
+
+  font-size: 13px;
+
+  margin-bottom: 5px;
+}
+
+.info-panel p {
+  color: var(--muted);
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card {
+    min-height: auto;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .navbar nav {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar,
+  .services-page {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .navbar {
+    height: auto;
+    min-height: 70px;
+  }
+
+  .navbar nav {
+    display: none;
+  }
+
+  .services-page {
+    padding-top: 48px;
+  }
+
+  .page-heading h1 {
+    font-size: 38px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .network-status {
+    align-self: flex-start;
+  }
 }

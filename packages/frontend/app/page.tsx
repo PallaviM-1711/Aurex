@@ -1,62 +1,173 @@
 "use client";
 
-import { useState } from "react";
-import { useAccount, useWriteContract } from "wagmi";
-import { ConnectButton } from "@/components/ConnectButton";
-import { NetworkSwitcher } from "@/components/NetworkSwitcher";
-import { NetworkWarning } from "@/components/NetworkWarning";
-import { useHello } from "@/hooks/useHello";
-
 export default function Home() {
-  const { isConnected } = useAccount();
-  const { address, abi, message, refetchMessage } = useHello();
-  const { writeContract, isPending } = useWriteContract();
-  const [draft, setDraft] = useState("");
-
-  function updateMessage() {
-    if (!address || !draft) return;
-    writeContract(
-      { address, abi, functionName: "setMessage", args: [draft] },
-      { onSuccess: () => refetchMessage() }
-    );
-    setDraft("");
-  }
-
   return (
-    <main>
-      <h1>{"my-mst-project"}</h1>
-      <p>Scaffolded with create-mst-app — blank template.</p>
+    <main className="app">
+      <header className="navbar">
+        <div className="logo">
+          <div className="logo-mark">A</div>
+          <span>Aurex</span>
+        </div>
 
-      <ConnectButton />
-      <NetworkSwitcher />
-      <NetworkWarning />
+        <nav>
+          <a className="active" href="/">
+            Services
+          </a>
 
-      <div className="card">
-        <h2>Hello.sol</h2>
-        {address ? (
-          <>
-            <p>
-              On-chain message: <strong>{message ?? "loading…"}</strong>
+          <a href="/activity">
+            Activity
+          </a>
+        </nav>
+
+        <button className="wallet-button">
+          Connect Wallet
+        </button>
+      </header>
+
+      <section className="services-page">
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow">AUREX PAYMENT PLATFORM</p>
+
+            <h1>
+              Choose a service
+            </h1>
+
+            <p className="subtitle">
+              Select a service and pay according to your actual
+              usage.
             </p>
-            {isConnected && (
-              <div className="wallet">
-                <input
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  placeholder="New message"
-                />
-                <button disabled={isPending || !draft} onClick={updateMessage}>
-                  {isPending ? "Sending…" : "Set message"}
-                </button>
+          </div>
+
+          <div className="network-status">
+            <span className="status-dot" />
+            MST Testnet
+          </div>
+        </div>
+
+        <div className="service-grid">
+          {/* Workspace */}
+          <div className="service-card selected">
+            <div className="service-card-top">
+              <div className="service-icon">
+                W
               </div>
-            )}
-          </>
-        ) : (
-          <p>
-            Deploy the contract with <code>npm run deploy:testnet</code> to see it here.
-          </p>
-        )}
-      </div>
+
+              <span className="available">
+                Available
+              </span>
+            </div>
+
+            <div className="service-content">
+              <h2>Workspace</h2>
+
+              <p>
+                Use a flexible digital workspace and pay
+                according to the time you consume.
+              </p>
+            </div>
+
+            <div className="price-section">
+              <span>Usage rate</span>
+
+              <div className="price">
+                <strong>₹50</strong>
+                <span>/ hour</span>
+              </div>
+            </div>
+
+            <button className="start-button">
+              Start Using
+              <span>→</span>
+            </button>
+          </div>
+
+          {/* AI Compute */}
+          <div className="service-card">
+            <div className="service-card-top">
+              <div className="service-icon">
+                AI
+              </div>
+
+              <span className="coming-soon">
+                Demo
+              </span>
+            </div>
+
+            <div className="service-content">
+              <h2>AI Compute</h2>
+
+              <p>
+                Usage-based compute service designed to
+                demonstrate resource-based billing.
+              </p>
+            </div>
+
+            <div className="price-section">
+              <span>Billing model</span>
+
+              <div className="price">
+                <strong>Usage</strong>
+                <span>based</span>
+              </div>
+            </div>
+
+            <button className="start-button secondary">
+              View Service
+              <span>→</span>
+            </button>
+          </div>
+
+          {/* Rendering */}
+          <div className="service-card">
+            <div className="service-card-top">
+              <div className="service-icon">
+                3D
+              </div>
+
+              <span className="coming-soon">
+                Demo
+              </span>
+            </div>
+
+            <div className="service-content">
+              <h2>3D Rendering</h2>
+
+              <p>
+                A demonstration service where customers
+                are charged based on rendering usage.
+              </p>
+            </div>
+
+            <div className="price-section">
+              <span>Billing model</span>
+
+              <div className="price">
+                <strong>Usage</strong>
+                <span>based</span>
+              </div>
+            </div>
+
+            <button className="start-button secondary">
+              View Service
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="info-panel">
+          <div className="info-icon">i</div>
+
+          <div>
+            <strong>How Aurex works</strong>
+
+            <p>
+              Choose a service → Start using → Track usage →
+              Stop usage → Generate your bill → Pay with MST.
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
