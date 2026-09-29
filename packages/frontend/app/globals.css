@@ -1,22 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
-  --bg: #070b12;
-  --surface: #0d131d;
-  --surface-hover: #111a27;
-  --border: #1d2938;
-  --border-light: #263548;
+  --bg: #070a0f;
+  --surface: #0e141d;
+  --surface-2: #121a25;
+  --border: #202c3b;
+  --border-hover: #34445a;
 
-  --text: #f4f7fb;
-  --muted: #8996a8;
-  --muted-light: #b5c0ce;
+  --text: #f5f7fb;
+  --muted: #8e9bad;
+  --muted-light: #b8c2d0;
 
-  --accent: #7c5cff;
-  --accent-light: #9b82ff;
-  --accent-soft: rgba(124, 92, 255, 0.12);
+  --purple: #7657ff;
+  --purple-light: #947dff;
+  --purple-soft: rgba(118, 87, 255, 0.12);
 
-  --success: #36d399;
-  --success-soft: rgba(54, 211, 153, 0.1);
+  --green: #35d69a;
+  --green-soft: rgba(53, 214, 154, 0.1);
+
+  --red: #ff6b6b;
 }
 
 * {
@@ -30,19 +32,20 @@ html {
 }
 
 body {
+  min-height: 100vh;
   background: var(--bg);
   color: var(--text);
   font-family: "Inter", sans-serif;
-  min-height: 100vh;
-}
-
-button,
-a {
-  font: inherit;
 }
 
 button {
+  font: inherit;
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 a {
@@ -50,28 +53,30 @@ a {
   text-decoration: none;
 }
 
-/* =========================
+/* =========================================
    APP
-========================= */
+========================================= */
 
 .app {
   min-height: 100vh;
+
   background:
     radial-gradient(
-      circle at 50% -20%,
-      rgba(124, 92, 255, 0.12),
-      transparent 40%
+      circle at 50% -15%,
+      rgba(118, 87, 255, 0.12),
+      transparent 35%
     ),
     var(--bg);
 }
 
-/* =========================
+/* =========================================
    NAVBAR
-========================= */
+========================================= */
 
 .navbar {
   width: min(1180px, calc(100% - 48px));
-  height: 72px;
+  height: 74px;
+
   margin: 0 auto;
 
   display: flex;
@@ -84,7 +89,7 @@ a {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
 
   font-size: 20px;
   font-weight: 700;
@@ -92,63 +97,61 @@ a {
 }
 
 .logo-mark {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 10px;
+  border-radius: 11px;
 
   background: linear-gradient(
     135deg,
-    var(--accent),
-    #5a3ee8
+    #8668ff,
+    #6241ee
   );
 
   color: white;
-  font-size: 17px;
+
+  font-size: 18px;
   font-weight: 800;
 
   box-shadow:
-    0 8px 25px rgba(124, 92, 255, 0.25);
+    0 8px 25px rgba(118, 87, 255, 0.25);
 }
 
 .navbar nav {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 38px;
 }
 
 .navbar nav a {
   color: var(--muted);
+
   font-size: 14px;
   font-weight: 500;
 
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+  transition: color 0.2s ease;
 }
 
-.navbar nav a:hover {
-  color: white;
-}
-
+.navbar nav a:hover,
 .navbar nav a.active {
   color: white;
 }
 
 .wallet-button {
-  border: 1px solid var(--border-light);
-  background: var(--surface);
+  padding: 11px 18px;
+
+  border: 1px solid var(--border-hover);
+  border-radius: 10px;
+
+  background: rgba(14, 20, 29, 0.8);
 
   color: var(--text);
 
-  padding: 10px 17px;
-  border-radius: 9px;
-
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 
   transition:
@@ -157,60 +160,66 @@ a {
 }
 
 .wallet-button:hover {
-  background: var(--surface-hover);
-  border-color: #3a4d65;
+  background: var(--surface-2);
+  border-color: #455872;
 }
 
-/* =========================
-   SERVICES PAGE
-========================= */
+/* =========================================
+   MAIN PAGE
+========================================= */
 
 .services-page {
-  width: min(1180px, calc(100% - 48px));
+  width: min(1080px, calc(100% - 48px));
+
   margin: 0 auto;
-  padding: 72px 0 100px;
+
+  padding: 68px 0 100px;
 }
 
-/* =========================
-   PAGE HEADING
-========================= */
+/* =========================================
+   PAGE HEADER
+========================================= */
 
 .page-heading {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 
-  margin-bottom: 48px;
+  margin-bottom: 42px;
 }
 
 .eyebrow {
-  color: var(--accent-light);
+  margin-bottom: 12px;
+
+  color: var(--purple-light);
 
   font-size: 11px;
   font-weight: 700;
 
   letter-spacing: 1.5px;
-
-  margin-bottom: 13px;
+  text-transform: uppercase;
 }
 
 .page-heading h1 {
-  font-size: clamp(36px, 5vw, 52px);
-  line-height: 1.05;
+  margin-bottom: 14px;
 
-  letter-spacing: -2px;
+  color: var(--text);
+
+  font-size: clamp(38px, 5vw, 52px);
+  line-height: 1;
+
   font-weight: 800;
 
-  margin-bottom: 16px;
+  letter-spacing: -2.5px;
 }
 
 .subtitle {
+  max-width: 620px;
+
   color: var(--muted);
 
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.7;
-
-  max-width: 560px;
 }
 
 .network-status {
@@ -220,15 +229,17 @@ a {
 
   padding: 10px 14px;
 
-  border: 1px solid rgba(54, 211, 153, 0.2);
-  background: var(--success-soft);
-
+  border: 1px solid rgba(53, 214, 154, 0.2);
   border-radius: 999px;
 
-  color: #8ce9bf;
+  background: var(--green-soft);
+
+  color: #80e8bc;
 
   font-size: 12px;
   font-weight: 600;
+
+  white-space: nowrap;
 }
 
 .status-dot {
@@ -236,55 +247,57 @@ a {
   height: 7px;
 
   border-radius: 50%;
-  background: var(--success);
+
+  background: var(--green);
 
   box-shadow:
-    0 0 0 4px rgba(54, 211, 153, 0.08);
+    0 0 0 4px rgba(53, 214, 154, 0.08);
 }
 
-/* =========================
-   SERVICE GRID
-========================= */
+/* =========================================
+   SERVICE AREA
+========================================= */
 
 .service-grid {
-  display: grid;
+  width: 100%;
 
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  display: flex;
+  justify-content: center;
 
-  gap: 20px;
+  margin-bottom: 28px;
 }
 
-/* =========================
+/* =========================================
    SERVICE CARD
-========================= */
+========================================= */
 
 .service-card {
-  min-height: 410px;
+  width: min(620px, 100%);
+  min-height: 390px;
+
+  padding: 30px;
 
   display: flex;
   flex-direction: column;
 
-  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
 
   background:
     linear-gradient(
-      180deg,
+      145deg,
       rgba(255, 255, 255, 0.025),
       rgba(255, 255, 255, 0)
     ),
     var(--surface);
 
-  border: 1px solid var(--border);
-  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
 
   transition:
     transform 0.25s ease,
     border-color 0.25s ease,
-    background 0.25s ease;
-
-  position: relative;
-  overflow: hidden;
+    box-shadow 0.25s ease;
 }
 
 .service-card::before {
@@ -293,76 +306,67 @@ a {
   position: absolute;
 
   top: 0;
-  left: 0;
-  right: 0;
+  left: 12%;
+  right: 12%;
 
   height: 1px;
 
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(124, 92, 255, 0.5),
+    rgba(118, 87, 255, 0.7),
     transparent
   );
-
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.service-card:hover {
-  transform: translateY(-4px);
-
-  border-color: var(--border-light);
-
-  background: var(--surface-hover);
-}
-
-.service-card:hover::before {
-  opacity: 1;
 }
 
 .service-card.selected {
-  border-color: rgba(124, 92, 255, 0.45);
+  border-color: rgba(118, 87, 255, 0.42);
 
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.2),
-    0 0 40px rgba(124, 92, 255, 0.06);
+    0 25px 80px rgba(0, 0, 0, 0.28),
+    0 0 60px rgba(118, 87, 255, 0.06);
 }
 
-/* =========================
-   CARD TOP
-========================= */
+.service-card:hover {
+  transform: translateY(-3px);
+
+  border-color: rgba(118, 87, 255, 0.6);
+}
+
+/* =========================================
+   SERVICE CARD TOP
+========================================= */
 
 .service-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 38px;
+  margin-bottom: 42px;
 }
 
 .service-icon {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 13px;
+  border: 1px solid rgba(118, 87, 255, 0.25);
+  border-radius: 14px;
 
-  background: var(--accent-soft);
-  border: 1px solid rgba(124, 92, 255, 0.18);
+  background: var(--purple-soft);
 
-  color: var(--accent-light);
+  color: var(--purple-light);
 
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
 }
 
 .available,
 .coming-soon {
-  padding: 6px 9px;
+  padding: 7px 11px;
 
   border-radius: 999px;
 
@@ -373,46 +377,46 @@ a {
 }
 
 .available {
-  color: #7ee6b2;
-  background: var(--success-soft);
+  background: var(--green-soft);
+  color: #7be6b8;
 }
 
 .coming-soon {
+  background: rgba(255, 255, 255, 0.045);
   color: var(--muted);
-  background: rgba(255, 255, 255, 0.04);
 }
 
-/* =========================
-   CARD CONTENT
-========================= */
+/* =========================================
+   SERVICE CONTENT
+========================================= */
 
 .service-content h2 {
-  font-size: 23px;
+  margin-bottom: 12px;
+
+  font-size: 27px;
   font-weight: 700;
 
-  letter-spacing: -0.6px;
-
-  margin-bottom: 11px;
+  letter-spacing: -0.8px;
 }
 
 .service-content p {
+  max-width: 500px;
+
   color: var(--muted);
 
   font-size: 14px;
-  line-height: 1.65;
-
-  min-height: 70px;
+  line-height: 1.7;
 }
 
-/* =========================
+/* =========================================
    PRICE
-========================= */
+========================================= */
 
 .price-section {
   margin-top: auto;
 
   padding-top: 25px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 
   border-top: 1px solid var(--border);
 }
@@ -420,28 +424,28 @@ a {
 .price-section > span {
   display: block;
 
+  margin-bottom: 7px;
+
   color: var(--muted);
 
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
 
-  margin-bottom: 6px;
-
+  letter-spacing: 1px;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
 }
 
 .price {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 7px;
 }
 
 .price strong {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
 
-  letter-spacing: -0.8px;
+  letter-spacing: -1px;
 }
 
 .price span {
@@ -449,24 +453,24 @@ a {
   font-size: 13px;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* =========================================
+   BUTTON
+========================================= */
 
 .start-button {
   width: 100%;
 
+  min-height: 48px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-
-  padding: 13px 16px;
+  gap: 10px;
 
   border: 0;
   border-radius: 10px;
 
-  background: var(--accent);
+  background: var(--purple);
 
   color: white;
 
@@ -479,49 +483,42 @@ a {
     box-shadow 0.2s ease;
 }
 
-.start-button:hover {
-  background: var(--accent-light);
+.start-button:hover:not(:disabled) {
+  background: var(--purple-light);
 
   transform: translateY(-1px);
 
   box-shadow:
-    0 10px 25px rgba(124, 92, 255, 0.2);
+    0 12px 30px rgba(118, 87, 255, 0.22);
 }
 
 .start-button.secondary {
   background: rgba(255, 255, 255, 0.04);
 
-  color: var(--muted-light);
-
   border: 1px solid var(--border);
+
+  color: var(--muted-light);
 }
 
-.start-button.secondary:hover {
-  background: rgba(255, 255, 255, 0.07);
-
-  border-color: var(--border-light);
-
-  box-shadow: none;
-}
-
-/* =========================
-   INFO PANEL
-========================= */
+/* =========================================
+   INFORMATION PANEL
+========================================= */
 
 .info-panel {
-  margin-top: 24px;
+  width: 100%;
 
   display: flex;
   align-items: flex-start;
-  gap: 15px;
+  gap: 14px;
 
-  padding: 20px 22px;
+  padding: 18px 20px;
+
+  margin-top: 18px;
 
   border: 1px solid var(--border);
+  border-radius: 13px;
 
-  border-radius: 14px;
-
-  background: rgba(13, 19, 29, 0.7);
+  background: rgba(14, 20, 29, 0.65);
 }
 
 .info-icon {
@@ -536,20 +533,20 @@ a {
 
   border-radius: 50%;
 
-  background: var(--accent-soft);
+  background: var(--purple-soft);
 
-  color: var(--accent-light);
+  color: var(--purple-light);
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .info-panel strong {
   display: block;
 
-  font-size: 13px;
-
   margin-bottom: 5px;
+
+  font-size: 13px;
 }
 
 .info-panel p {
@@ -559,39 +556,107 @@ a {
   line-height: 1.6;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================
+   ACTIVE USAGE PANEL
+========================================= */
 
-@media (max-width: 900px) {
-  .service-grid {
-    grid-template-columns: 1fr;
-  }
+.active-usage-panel {
+  width: 100%;
 
-  .service-card {
-    min-height: auto;
-  }
+  margin-top: 24px;
+  padding: 28px;
 
-  .page-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 22px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
 
-  .navbar nav {
-    gap: 18px;
-  }
+  border: 1px solid rgba(53, 214, 154, 0.25);
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(53, 214, 154, 0.06),
+      rgba(14, 20, 29, 0.8)
+    );
 }
 
-@media (max-width: 600px) {
-  .navbar,
-  .services-page {
-    width: min(100% - 28px, 1180px);
-  }
+.active-usage-panel h2 {
+  margin-bottom: 12px;
 
+  font-size: 21px;
+  letter-spacing: -0.5px;
+}
+
+.active-usage-panel p:not(.eyebrow) {
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+.usage-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 10px 14px;
+
+  border: 1px solid rgba(53, 214, 154, 0.2);
+  border-radius: 999px;
+
+  background: var(--green-soft);
+
+  color: #7be6b8;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+/* =========================================
+   BILL TOTAL
+========================================= */
+
+.bill-total {
+  min-width: 150px;
+
+  padding: 18px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  text-align: right;
+}
+
+.bill-total span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+}
+
+.bill-total strong {
+  color: var(--text);
+
+  font-size: 25px;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
   .navbar {
-    height: auto;
-    min-height: 70px;
+    width: calc(100% - 28px);
   }
 
   .navbar nav {
@@ -599,18 +664,36 @@ a {
   }
 
   .services-page {
+    width: calc(100% - 28px);
+
     padding-top: 48px;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 20px;
   }
 
   .page-heading h1 {
     font-size: 38px;
   }
 
-  .subtitle {
-    font-size: 14px;
+  .service-card {
+    padding: 24px;
   }
 
-  .network-status {
-    align-self: flex-start;
+  .active-usage-panel {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .bill-total {
+    width: 100%;
+
+    text-align: left;
   }
 }
