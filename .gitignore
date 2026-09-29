@@ -26,5 +26,10 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+<<<<<<< HEAD
 # local Hardhat deployment output
 packages/contracts/deployments.json
+=======
+__pycache__/
+*.pyc
+>>>>>>> ee854bf (Add FastAPI backend with Supabase integration)
