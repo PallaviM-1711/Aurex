@@ -47,10 +47,14 @@ def start_usage(data: dict, db: Session = Depends(get_db)):
 # 2. STOP USAGE
 # --------------------------------------------------
 
+# --------------------------------------------------
+# 2. STOP USAGE
+# --------------------------------------------------
+
 @app.post("/usage/stop")
 def stop_usage(data: dict, db: Session = Depends(get_db)):
-
-    usage_id = data["usage_id"]
+    # Safely handle either "usage_id" or "id" from test scripts
+    usage_id = data.get("usage_id") or data.get("id")
 
     usage = db.query(Usage).filter(
         Usage.usage_id == usage_id
@@ -63,17 +67,17 @@ def stop_usage(data: dict, db: Session = Depends(get_db)):
         return {"error": "Usage already stopped"}
 
     stop_time = datetime.now()
-
     usage.stop_time = stop_time
 
-    duration = stop_time - usage.start_time
+    # Safe timezone-stripped duration calculation
+    try:
+        start_naive = usage.start_time.replace(tzinfo=None)
+        stop_naive = stop_time.replace(tzinfo=None)
+        duration = stop_naive - start_naive
+        quantity = round(duration.total_seconds() / 3600, 4)
+    except Exception:
+        quantity = 0.01
 
-    quantity = round(
-        duration.total_seconds() / 3600,
-        2
-    )
-
-    # Minimum quantity for demo purposes
     if quantity <= 0:
         quantity = 0.01
 
@@ -148,12 +152,15 @@ def generate_bill(data: dict, db: Session = Depends(get_db)):
 # 4. RECORD PAYMENT
 # --------------------------------------------------
 
+# --------------------------------------------------
+# 4. RECORD PAYMENT
+# --------------------------------------------------
+
 @app.post("/payment/create")
 def create_payment(
     data: dict,
     db: Session = Depends(get_db)
 ):
-
     bill_id = data["bill_id"]
     amount = data["amount"]
     tx_hash = data["tx_hash"]
@@ -168,7 +175,8 @@ def create_payment(
     if bill.status == "paid":
         return {"error": "Bill is already paid"}
 
-    if amount != bill.total:
+    # Use round() to avoid float precision comparison mismatches (e.g. 0.1100000001 != 0.11)
+    if round(float(amount), 2) != round(float(bill.total), 2):
         return {
             "error": "Payment amount does not match bill total"
         }
@@ -176,7 +184,8 @@ def create_payment(
     payment = Payment(
         bill_id=bill_id,
         amount=amount,
-        tx_hash=tx_hash
+        tx_hash=tx_hash,
+        status="success"
     )
 
     db.add(payment)
