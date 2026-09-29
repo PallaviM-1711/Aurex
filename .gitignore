@@ -33,3 +33,4 @@ packages/contracts/deployments.json
 __pycache__/
 *.pyc
 >>>>>>> ee854bf (Add FastAPI backend with Supabase integration)
+backend/venv/
