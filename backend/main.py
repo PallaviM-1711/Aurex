@@ -47,13 +47,10 @@ def start_usage(data: dict, db: Session = Depends(get_db)):
 # 2. STOP USAGE
 # --------------------------------------------------
 
-# --------------------------------------------------
-# 2. STOP USAGE
-# --------------------------------------------------
-
 @app.post("/usage/stop")
 def stop_usage(data: dict, db: Session = Depends(get_db)):
-    # Safely handle either "usage_id" or "id" from test scripts
+
+    # Safely handle either "usage_id" or "id"
     usage_id = data.get("usage_id") or data.get("id")
 
     usage = db.query(Usage).filter(
@@ -69,12 +66,19 @@ def stop_usage(data: dict, db: Session = Depends(get_db)):
     stop_time = datetime.now()
     usage.stop_time = stop_time
 
-    # Safe timezone-stripped duration calculation
+    # Calculate usage duration
     try:
         start_naive = usage.start_time.replace(tzinfo=None)
         stop_naive = stop_time.replace(tzinfo=None)
+
         duration = stop_naive - start_naive
-        quantity = round(duration.total_seconds() / 3600, 4)
+
+        # Quantity is stored in hours
+        quantity = round(
+            duration.total_seconds() / 3600,
+            4
+        )
+
     except Exception:
         quantity = 0.01
 
@@ -115,8 +119,15 @@ def generate_bill(data: dict, db: Session = Depends(get_db)):
             "error": "Usage must be stopped before billing"
         }
 
-    # Demo rate: ₹50 per hour
-    rate_per_hour = 50
+    # Aurex MST Testnet pricing
+    #
+    # Smart contract:
+    # 0.20 tMSTC per minute
+    #
+    # Therefore:
+    # 0.20 × 60 = 12 tMSTC per hour
+    #
+    rate_per_hour = 12
 
     subtotal = round(
         usage.quantity * rate_per_hour,
@@ -152,15 +163,12 @@ def generate_bill(data: dict, db: Session = Depends(get_db)):
 # 4. RECORD PAYMENT
 # --------------------------------------------------
 
-# --------------------------------------------------
-# 4. RECORD PAYMENT
-# --------------------------------------------------
-
 @app.post("/payment/create")
 def create_payment(
     data: dict,
     db: Session = Depends(get_db)
 ):
+
     bill_id = data["bill_id"]
     amount = data["amount"]
     tx_hash = data["tx_hash"]
@@ -175,7 +183,8 @@ def create_payment(
     if bill.status == "paid":
         return {"error": "Bill is already paid"}
 
-    # Use round() to avoid float precision comparison mismatches (e.g. 0.1100000001 != 0.11)
+    # Compare payment amount with bill total
+    # after rounding to avoid floating-point issues.
     if round(float(amount), 2) != round(float(bill.total), 2):
         return {
             "error": "Payment amount does not match bill total"
