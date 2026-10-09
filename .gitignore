@@ -1,36 +1,35 @@
+
 node_modules/
 .env
 .env.local
 .env*.local
 
-# hardhat
+# Python
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+
+# Hardhat
 artifacts/
 cache/
 typechain-types/
 coverage/
 coverage.json
+packages/contracts/deployments.json
 
-# next.js
+# Next.js
 .next/
 out/
 build/
 
-# turbo
+# Turbo
 .turbo/
 
-# misc
+# Misc
 .DS_Store
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-<<<<<<< HEAD
-# local Hardhat deployment output
-packages/contracts/deployments.json
-=======
-__pycache__/
-*.pyc
->>>>>>> ee854bf (Add FastAPI backend with Supabase integration)
-backend/venv/
